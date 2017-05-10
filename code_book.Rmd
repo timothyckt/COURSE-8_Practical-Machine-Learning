@@ -1,0 +1,72 @@
+## free up memory
+rm(list=ls())
+
+## Loading required package
+require(data.table)
+install.packages('caret', dependencies = TRUE)
+install.packages('corrplot', dependencies = TRUE)
+
+## Loading library
+library(knitr);
+library(caret); 
+library(rpart);
+library(ggplot2);
+library(corrplot);
+library(randomForest);
+
+## download data from URL
+Url.Train <- "http://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+Url.Test  <- "http://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+training <- read.csv(url(Url.Train))
+testing  <- read.csv(url(Url.Test))
+
+inTrain  <- createDataPartition(training$classe, p=0.7, list=FALSE)
+TrainSet <- training[inTrain, ]
+TestSet  <- training[-inTrain, ]
+
+## View data
+View(TrainSet)
+View(TestSet)
+
+## Remove variables with Nearly Zero Variance
+NZV <- nearZeroVar(TrainSet)
+TrainSet <- TrainSet[, -NZV]
+TestSet  <- TestSet[, -NZV]
+
+## Remove variables which are mostly NA
+AllNA    <- sapply(TrainSet, function(x) mean(is.na(x))) > 0.95
+TrainSet <- TrainSet[, AllNA==FALSE]
+TestSet  <- TestSet[, AllNA==FALSE]
+
+## Remove identification only variables (columns 1 to 5)
+TrainSet <- TrainSet[, -(1:5)]
+TestSet  <- TestSet[, -(1:5)]
+
+## View data
+View(TrainSet)
+View(TestSet)
+
+## Data exploration
+corMatrix <- cor(TrainSet[,-54])
+corrplot(corMatrix, order = "FPC", method = "color", type = "lower", tl.cex = 0.8, tl.col = rgb(0, 0, 0))
+
+## Decision Trees
+model_tree <- rpart(classe ~ ., data=TrainSet, method="class")
+prediction_tree <- predict(model_tree, TestSet, type="class")
+class_tree <- confusionMatrix(prediction_tree, TestSet$classe)
+class_tree
+
+## Random Forest
+forest_model <- randomForest(classe ~ ., data=TrainSet, method="class")
+prediction_forest <- predict(forest_model, TestSet, type="class")
+random_forest <- confusionMatrix(prediction_forest, TestSet$classe)
+random_forest
+
+## Using Random Forest
+prediction <- predict(forest_model, newdata=TestSet)
+confusionMatrix(prediction, TestSet$classe)
+
+prediction
+
+sessionInfo()

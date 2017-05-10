@@ -1,0 +1,404 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:PMingLiU;
+	panose-1:2 2 5 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@PMingLiU";
+	panose-1:2 2 5 0 0 0 0 0 0 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"Header Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-link:Header;}
+span.FooterChar
+	{mso-style-name:"Footer Char";
+	mso-style-link:Footer;}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link="#0563C1" vlink="#954F72">
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span style='font-size:20.0pt;line-height:107%'>Prediction
+Assignment Writeup </span></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Background</span></u></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>Using
+devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to
+collect a large amount of data about personal activity relatively
+inexpensively. These type of devices are part of the quantified self movement –
+a group of enthusiasts who take measurements about themselves regularly to
+improve their health, to find patterns in their behavior, or because they are
+tech geeks. One thing that people regularly do is quantify how much of a
+particular activity they do, but they rarely quantify how well they do it. In
+this project, your goal will be to use data from accelerometers on the belt,
+forearm, arm, and dumbell of 6 participants. They were asked to perform barbell
+lifts correctly and incorrectly in 5 different ways. More information is
+available from the website here: http://groupware.les.inf.puc-rio.br/har (see
+the section on the Weight Lifting Exercise Dataset).</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Data</span></u></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>The training
+data for this project are available here:</span></p>
+
+<p class=MsoNormal><a
+href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"><span
+style='font-size:12.0pt;line-height:107%'>https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv</span></a></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>The test
+data are available here:</span></p>
+
+<p class=MsoNormal><a
+href="https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"><span
+style='font-size:12.0pt;line-height:107%'>https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv</span></a></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>The data for
+this project come from this source: http://groupware.les.inf.puc-rio.br/har. If
+you use the document you create for this class for any purpose please cite them
+as they have been very generous in allowing their data to be used for this kind
+of assignment.</span></p>
+
+<span style='font-size:12.0pt;line-height:107%;font-family:"Calibri",sans-serif'><br
+clear=all style='page-break-before:always'>
+</span>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Environment
+Setting</span></u></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## free up memory</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>rm(list=ls())</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Loading required package</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>require(data.table)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>install.packages('caret', dependencies = TRUE)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>install.packages('corrplot', dependencies = TRUE)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Loading library</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>library(knitr);</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>library(caret); </span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>library(rpart);</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>library(ggplot2);</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>library(corrplot);</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>library(randomForest);</span></i></p>
+
+<p class=MsoNormal><span style='font-size:16.0pt;line-height:107%'>&nbsp;</span></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Data
+Preparation</span></u></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## download data from URL</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>Url.Train &lt;-
+&quot;http://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv&quot;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>Url.Test  &lt;-
+&quot;http://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv&quot;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>training &lt;- read.csv(url(Url.Train))</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>testing  &lt;- read.csv(url(Url.Test))</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>inTrain  &lt;- createDataPartition(training$classe, p=0.7,
+list=FALSE)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TrainSet &lt;- training[inTrain, ]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TestSet  &lt;- training[-inTrain, ]</span></i></p>
+
+<p class=MsoNormal><span style='font-size:16.0pt;line-height:107%'><img
+border=0 width=624 height=115 id="Picture 2"
+src="Prediction%20Assignment%20Writeup_files/image001.jpg"></span></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## View data</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>View(TrainSet)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>View(TestSet)</span></i></p>
+
+<p class=MsoNormal><span style='font-size:16.0pt;line-height:107%'>&nbsp;</span></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Data
+Cleaning</span></u></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Remove variables with Nearly Zero Variance</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>NZV &lt;- nearZeroVar(TrainSet)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TrainSet &lt;- TrainSet[, -NZV]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TestSet  &lt;- TestSet[, -NZV]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Remove variables which are mostly NA</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>AllNA    &lt;- sapply(TrainSet, function(x) mean(is.na(x)))
+&gt; 0.95</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TrainSet &lt;- TrainSet[, AllNA==FALSE]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TestSet  &lt;- TestSet[, AllNA==FALSE]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Remove identification only variables (columns 1 to 5)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TrainSet &lt;- TrainSet[, -(1:5)]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>TestSet  &lt;- TestSet[, -(1:5)]</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'><img
+border=0 width=624 height=112 id="Picture 4"
+src="Prediction%20Assignment%20Writeup_files/image002.jpg"></span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## View data</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>View(TrainSet)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>View(TestSet)</span></i></p>
+
+<p class=MsoNormal><span style='font-size:16.0pt;line-height:107%'>&nbsp;</span></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Training,
+testing &amp; validation data</span></u></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Data exploration</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>corMatrix &lt;- cor(TrainSet[,-54])</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>corrplot(corMatrix, order = &quot;FPC&quot;, method =
+&quot;color&quot;, type = &quot;lower&quot;, tl.cex = 0.8, tl.col = rgb(0, 0,
+0))</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'><img
+border=0 width=604 height=174 id="Picture 5"
+src="Prediction%20Assignment%20Writeup_files/image003.jpg"></span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Decision Trees</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>model_tree &lt;- rpart(classe ~ ., data=TrainSet,
+method=&quot;class&quot;)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>prediction_tree &lt;- predict(model_tree, TestSet,
+type=&quot;class&quot;)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>class_tree &lt;- confusionMatrix(prediction_tree,
+TestSet$classe)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>class_tree</span></i></p>
+
+<p class=MsoNormal><span style='position:absolute;z-index:251661312;margin-left:
+-7px;margin-top:142px;width:430px;height:159px'><img width=430 height=159
+src="Prediction%20Assignment%20Writeup_files/image004.gif"></span><i><span
+style='font-size:12.0pt;line-height:107%'><img border=0 width=572 height=466
+id="Picture 7" src="Prediction%20Assignment%20Writeup_files/image005.jpg"></span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Random Forest</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>forest_model &lt;- randomForest(classe ~ ., data=TrainSet,
+method=&quot;class&quot;)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>prediction_forest &lt;- predict(forest_model, TestSet,
+type=&quot;class&quot;)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>random_forest &lt;- confusionMatrix(prediction_forest,
+TestSet$classe)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>random_forest</span></i></p>
+
+<p class=MsoNormal><span style='position:absolute;z-index:251659264;margin-left:
+-14px;margin-top:137px;width:430px;height:159px'><img width=430 height=159
+src="Prediction%20Assignment%20Writeup_files/image004.gif"></span><i><span
+style='font-size:12.0pt;line-height:107%'><img border=0 width=601 height=468
+id="Picture 6" src="Prediction%20Assignment%20Writeup_files/image006.jpg"></span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Data
+Prediction</span></u></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>## Using Random Forest</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>prediction &lt;- predict(forest_model, newdata=TestSet)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>confusionMatrix(prediction, TestSet$classe)</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'><img
+border=0 width=584 height=473 id="Picture 8"
+src="Prediction%20Assignment%20Writeup_files/image007.jpg"></span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>prediction</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'><img
+border=0 width=508 height=45 id="Picture 10"
+src="Prediction%20Assignment%20Writeup_files/image008.jpg"></span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><u><span style='font-size:16.0pt;line-height:107%'>Other</span></u></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%;
+background:yellow'>sessionInfo()</span></i></p>
+
+<p class=MsoNormal><i><span style='font-size:12.0pt;line-height:107%'><img
+border=0 width=624 height=276 id="Picture 11"
+src="Prediction%20Assignment%20Writeup_files/image009.jpg"></span></i></p>
+
+</div>
+
+</body>
+
+</html>
